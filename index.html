@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+  body {
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+    background: linear-gradient(135deg, #1e3a8a, #1e40af); /* Blue gradient background */
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: #ffffff;
+    font-size: 2.5em;
+    margin-top: 20px;
+}
+
+.scoreboard {
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    color: #ffffff;
+}
+
+.score {
+    display: inline-block;
+    margin: 0 20px;
+    color: #ffffff;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 120px);
+    grid-template-rows: repeat(3, 120px);
+    gap: 15px; /* Increased gap between cells */
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.cell {
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em;
+    background-color: #ffffff; /* White background for cells */
+    border-radius: 12px;
+    border: 3px solid #007acc; /* Blue border for cells */
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+}
+
+.cell:hover {
+    background-color: #f0f8ff; /* Very light blue on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+    transform: scale(1.1); /* Slightly larger on hover */
+}
+
+.cell.X {
+    color: #ff6f61; /* Coral color for X */
+    transition: color 0.3s; /* Smooth color transition */
+}
+
+.cell.O {
+    color: #4caf50; /* Green color for O */
+    transition: color 0.3s; /* Smooth color transition */
+}
+
+button {
+    font-size: 1.2em;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ff6f61; /* Coral color for button */
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+button:hover {
+    background-color: #ff3d39; /* Darker coral color on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow effect */
+}
+
+/* Existing CSS... */
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 15% auto;
+    width: 80%;
+    max-width: 400px;
+    position: relative;
+}
+
+.modal-header {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.modal-body {
+    margin-bottom: 15px;
+}
+
+.modal-footer {
+    text-align: right;
+}
+
+.modal-close {
+    background-color: #ff6f61; /* Coral color for close button */
+    border: none;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.modal-close:hover {
+    background-color: #ff3d39; /* Darker coral on hover */
+    transform: scale(1.05);
+}
+/* Existing CSS... */
+
+#startScreen {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#difficultyButtons {
+    margin-top: 20px;
+}
+
+.difficultyButton {
+    font-size: 1.2em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: #4caf50; /* Green for buttons */
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    margin: 5px;
+}
+
+.difficultyButton:hover {
+    background-color: #388e3c; /* Darker green on hover */
+    transform: scale(1.05);
+}
+
+#gameScreen {
+    text-align: center;
+    display: none; /* Hide game screen initially */
+}
+
+button {
+    font-size: 1.2em;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ff6f61; /* Coral color for buttons */
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+button:hover {
+    background-color: #ff3d39; /* Darker coral color on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow effect */
+}
+/* Existing CSS... */
+
+#backButton {
+    font-size: 1.2em;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f44336; /* Red color for back button */
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    margin-top: 10px;
+}
+
+#backButton:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Enhanced shadow effect */
+}
+
+
+    </style>
+    
+</head>
+<body>
+  <div id="startScreen">
+    <h1>Welcome to Tic-Tac-Toe</h1>
+    <button id="startButton">Start Game</button>
+    <div id="difficultyButtons" style="display: none;">
+        <button class="difficultyButton" data-level="easy">Easy</button>
+        <button class="difficultyButton" data-level="medium">Medium</button>
+        <button class="difficultyButton" data-level="hard">Hard</button>
+    </div>
+</div>
+
+<div id="gameScreen" style="display: none;">
+    <button id="backButton">Back</button>
+    <div class="scoreboard">
+        <div class="score">Player X: <span id="scoreX">0</span></div>
+        <div class="score">Player O: <span id="scoreO">0</span></div>
+    </div>
+    <div class="game-board">
+        <div class="cell" id="cell0"></div>
+        <div class="cell" id="cell1"></div>
+        <div class="cell" id="cell2"></div>
+        <div class="cell" id="cell3"></div>
+        <div class="cell" id="cell4"></div>
+        <div class="cell" id="cell5"></div>
+        <div class="cell" id="cell6"></div>
+        <div class="cell" id="cell7"></div>
+        <div class="cell" id="cell8"></div>
+    </div>
+    <button id="resetButton">Reset Game</button>
+</div>
+
+<!-- Modal HTML -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalMessage">Message</h2>
+        </div>
+        <div class="modal-footer">
+            <button id="modalCloseButton" class="modal-close">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Audio elements -->
+<audio id="startSound" src="https://github.com/Sm382/1effect/blob/main/mixkit-classic-alarm-995.wav" preload="auto"></audio>
+<audio id="endSound" src="https://github.com/Sm382/2effect/blob/main/mixkit-fast-small-sweep-transition-166.wav" preload="auto"></audio>
+<audio id="winSound" src="https://github.com/Sm382/3effect/blob/main/mixkit-arcade-retro-game-over-213.wav" preload="auto"></audio>
+
+
+
+    <script>
+const cells = document.querySelectorAll('.cell');
+const resetButton = document.getElementById('resetButton');
+const scoreXElement = document.getElementById('scoreX');
+const scoreOElement = document.getElementById('scoreO');
+const modal = document.getElementById('modal');
+const modalMessage = document.getElementById('modalMessage');
+const modalCloseButton = document.getElementById('modalCloseButton');
+const startScreen = document.getElementById('startScreen');
+const gameScreen = document.getElementById('gameScreen');
+const difficultyButtons = document.querySelectorAll('.difficultyButton');
+const backButton = document.getElementById('backButton');
+
+// Audio elements
+const startSound = document.getElementById('startSound');
+const endSound = document.getElementById('endSound');
+const winSound = document.getElementById('winSound');
+
+let board = ['', '', '', '', '', '', '', '', ''];
+let currentPlayer = 'X';
+let difficulty = 'easy'; // Default difficulty
+
+// Retrieve scores from local storage or initialize them
+let scoreX = parseInt(localStorage.getItem('scoreX')) || 0;
+let scoreO = parseInt(localStorage.getItem('scoreO')) || 0;
+
+// Update score display
+scoreXElement.textContent = scoreX;
+scoreOElement.textContent = scoreO;
+
+const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6]
+];
+
+function checkWinner() {
+    for (const combo of winningCombinations) {
+        const [a, b, c] = combo;
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+            return board[a];
+        }
+    }
+    return board.includes('') ? null : 'Draw';
+}
+
+function showModal(message) {
+    modalMessage.textContent = message;
+    modal.style.display = 'flex'; // Show the modal
+}
+
+function hideModal() {
+    modal.style.display = 'none'; // Hide the modal
+}
+
+function playSound(sound) {
+    sound.currentTime = 0; // Rewind to the beginning
+    sound.play();
+}
+
+function handleClick(event) {
+    const cellIndex = Array.from(cells).indexOf(event.target);
+    if (board[cellIndex] || checkWinner()) return;
+
+    board[cellIndex] = currentPlayer;
+    event.target.textContent = currentPlayer;
+    event.target.classList.add(currentPlayer);
+
+    const winner = checkWinner();
+    if (winner) {
+        if (winner === 'Draw') {
+            playSound(endSound); // Play end sound
+            showModal("It's a draw!");
+        } else {
+            if (winner === 'X') {
+                scoreX++;
+                localStorage.setItem('scoreX', scoreX);
+                scoreXElement.textContent = scoreX;
+            } else {
+                scoreO++;
+                localStorage.setItem('scoreO', scoreO);
+                scoreOElement.textContent = scoreO;
+            }
+            playSound(winSound); // Play win sound
+            showModal(`${winner} wins!`);
+        }
+    }
+
+    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+}
+
+function resetGame() {
+    board = ['', '', '', '', '', '', '', '', ''];
+    cells.forEach(cell => {
+        cell.textContent = '';
+        cell.classList.remove('X', 'O');
+    });
+    currentPlayer = 'X';
+    playSound(startSound); // Play start sound
+}
+
+function startGame() {
+    startScreen.style.display = 'none';
+    gameScreen.style.display = 'block';
+    playSound(startSound); // Play start sound when the game starts
+}
+
+function selectDifficulty(event) {
+    difficulty = event.target.getAttribute('data-level');
+    console.log(`Selected Difficulty: ${difficulty}`);
+    startGame(); // Hide the difficulty screen and show the game
+}
+
+function goBack() {
+    gameScreen.style.display = 'none';
+    startScreen.style.display = 'block';
+}
+
+document.getElementById('startButton').addEventListener('click', () => {
+    document.getElementById('difficultyButtons').style.display = 'block';
+});
+
+difficultyButtons.forEach(button => button.addEventListener('click', selectDifficulty));
+
+cells.forEach(cell => cell.addEventListener('click', handleClick));
+resetButton.addEventListener('click', resetGame);
+modalCloseButton.addEventListener('click', hideModal);
+backButton.addEventListener('click', goBack);
+window.addEventListener('click', (event) => {
+    if (event.target === modal) {
+        hideModal();
+    }
+});
+
+    </script>
+    
+</body>
+</html>
